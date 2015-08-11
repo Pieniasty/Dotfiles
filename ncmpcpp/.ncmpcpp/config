@@ -1,0 +1,12 @@
+visualizer_fifo_path = "/tmp/mpd.fifo"
+visualizer_output_name = "my_fifo"
+visualizer_sync_interval = "30" 
+visualizer_in_stereo = "yes"
+visualizer_look = ●▍
+visualizer_type = "spectrum" (spectrum/wave)
+visualizer_color = blue, cyan, green, yellow, magenta, red
+playlist_disable_highlight_delay = 2
+song_status_format = "$8%t $3❭❭ $2%a $3❭❭{ $5%b $3❭❭ }$4%y$2"
+song_library_format = "{%n - }{%t}|{%f}"
+now_playing_prefix = "$r$b"
+now_playing_suffix = "$/b$/r"

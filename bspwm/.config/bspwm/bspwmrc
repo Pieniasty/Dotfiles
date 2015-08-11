@@ -1,0 +1,19 @@
+#!/bin/zsh
+
+bspc config border_width        2
+bspc config window_gap  		7
+bspc config focus_follows_pointer true
+
+bspc config split_ratio         0.52
+bspc config borderless_monocle  true
+bspc config gapless_monocle     true
+bspc config focus_by_distance   true
+
+bspc monitor -d $(echo '\uf109') $(echo '\uf121') $(echo '\uf120') $(echo '\uf07c') $(echo '\uf0ac') $(echo '\uf1b6') $(echo '\uf008')  $(echo '\uf001') 
+
+bspc rule -a Steam desktop=^6
+bspc rule -a mpv desktop=^7 follow=on
+bspc rule -a Kodi desktop=^7 follow=on
+
+panel &
+compton &

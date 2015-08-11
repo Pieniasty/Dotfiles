@@ -1,0 +1,125 @@
+# my configs
+XF86AudioRaiseVolume
+	amixer set Master 3%+ 
+
+XF86AudioLowerVolume
+	amixer set Master 3%- 
+
+XF86AudioMute
+	amixer set Master toggle
+
+XF86MonBrightnessUp
+	xbacklight -inc 10%
+
+XF86MonBrightnessDown
+	xbacklight -dec 10%
+
+XF86AudioPlay
+	mpc toggle
+
+XF86AudioNext
+	mpc next
+
+XF86AudioPrev
+	mpc prev
+
+#
+# bspwm hotkeys
+#
+
+super + alt + Escape
+	bspc quit && pkill panel
+
+super + x
+	bspc window -c
+
+super + t
+	bspc desktop -l next
+
+super + b
+	bspc desktop -B
+
+super + {s,f}
+	bspc window -t {floating,fullscreen}
+
+super + {grave,Tab}
+	bspc {window,desktop} -f last
+
+super + apostrophe
+	bspc window -s last
+
+# to delete
+super + {o,i}
+	bspc control --record-history off; \
+	bspc window {older,newer} -f; \
+	bspc control --record-history on
+
+# to delete
+super + y
+	bspc window -w last.manual
+
+super + m
+	bspc window -s biggest
+
+super + {_,shift + }{left,down,up,right}
+	bspc window -{f,s} {left,down,up,right}
+
+super + {_,shift + }c
+	bspc window -f {next,prev}
+
+super + {comma,period}
+	bspc desktop -C {backward,forward}
+
+super + bracket{left,right}
+	bspc desktop -f {prev,next}
+
+super + ctrl + {left,down,up,right}
+	bspc window -p {left,down,up,right}
+
+super + ctrl + {_,shift + }space
+	bspc {window -p cancel,desktop -c}
+
+super + alt + {left,down,up,right}
+	bspc window -e {left -10,down +10,up -10,right +10}
+
+super + alt + shift + {left,down,up,right}
+	bspc window -e {right -10,up +10,down -10,left +10}
+
+super + ctrl + {1-9}
+	bspc window -r 0.{1-9}
+
+super + {_,shift + }{1-9,0}
+	bspc {desktop -f,window -d} ^{1-9,10}
+
+~button1
+	bspc pointer -g focus
+
+super + button1
+	; bspc pointer -g move
+
+super + shift + button1
+	; bspc pointer -g resize_corner
+
+super + !button{1-3}
+        bspc pointer -t %i %i
+
+super + @button{1-3}
+	bspc pointer -u
+
+alt + {minus,equal}
+    bspc config -d focused window_gap $((`bspc config -d focused window_gap` {+,-} 2 ))
+
+#
+# wm independent hotkeys
+#
+
+alt + Return
+	urxvt
+
+alt + space
+	j4-dmenu-desktop	
+#j4-dmenu-desktop -nb '#252527' -sb '#404E5E' -fn 'Cantarell-10' -h 46 -hist ~/.dmenu_hist
+
+# make sxhkd reload its configuration files:
+super + Escape
+	pkill -USR1 -x sxhkd
