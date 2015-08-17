@@ -18,7 +18,7 @@ Plugin 'itchyny/lightline.vim'
 Plugin 'edkolev/tmuxline.vim'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'morhetz/gruvbox'
-
+Plugin 'chriskempson/base16-vim'
 
 call vundle#end()
 filetype plugin indent on
@@ -69,15 +69,22 @@ set laststatus=2
 set splitbelow
 set splitright
 
+set mouse=a
+
 
 " custom mappings
 nnoremap ; :
 vnoremap ; :
 
-noremap <Up> k
-noremap <Down> j
+nnoremap j gj
+nnoremap k gk
+
+noremap <Up> gk
+noremap <Down> gj
 noremap <Left> h
 noremap <Right> l
+
+inoremap <C-v> <Esc>"+pi
 
 " leader mappings
 nnoremap <leader><leader> <c-^>
@@ -101,16 +108,55 @@ nnoremap <leader>rc :e ~/.config/compton.conf<CR>
 nnoremap <leader>rn :e ~/.ncmpcpp/config<CR>
 nnoremap <leader>rp :e ~/bin/panel<CR>
 
-autocmd! bufwritepost ~/.vimrc source ~/.vimrc
-
+autocmd! bufwritepost ~/.vimrc nested source ~/.vimrc
 
 let g:lightline = {
-      \ 'colorscheme': 'powerline',
-      \ 'component': {
-      \   'readonly': '%{&readonly?"":""}',
-      \ },
-      \ 'separator': { 'left': '', 'right': '' },
-      \ 'subseparator': { 'left': '', 'right': '' }
-      \ }
+        \ 'colorscheme': 'powerline',
+        \ 'mode_map': { 'c': 'NORMAL' },
+        \ 'component_function': {
+        \   'modified': 'LightLineModified',
+        \   'readonly': 'LightLineReadonly',
+        \   'filename': 'LightLineFilename',
+        \   'fileformat': 'LightLineFileformat',
+        \   'filetype': 'LightLineFiletype',
+        \   'fileencoding': 'LightLineFileencoding',
+        \ },
+        \ 'component_visible_condition': {
+        \   'readonly': '(&filetype!="help"&& &readonly)',
+        \   'modified': '(&filetype!="help"&&(&modified||!&modifiable))'
+        \ },
+        \ }
 
-colorscheme gruvbox
+function! LightLineModified()
+  return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+
+function! LightLineReadonly()
+  return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '⭤' : ''
+endfunction
+
+function! LightLineFilename()
+  return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
+        \ (&ft == 'vimfiler' ? vimfiler#get_status_string() : 
+        \  &ft == 'unite' ? unite#get_status_string() : 
+        \  &ft == 'vimshell' ? vimshell#get_status_string() :
+        \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
+        \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
+endfunction
+
+function! LightLineFileformat()
+  return winwidth(0) > 70 ? &fileformat : ''
+endfunction
+
+function! LightLineFiletype()
+  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
+endfunction
+
+function! LightLineFileencoding()
+  return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
+endfunction
+
+let base16colorspace=256
+
+colorscheme base16-default
+set background=dark

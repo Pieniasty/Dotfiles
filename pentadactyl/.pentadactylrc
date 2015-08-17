@@ -1,0 +1,21 @@
+colorscheme base16
+" colorscheme gruvbox-dark
+set guioptions=bCrs
+set hintkeys=arstneio
+set showtabline=multitab
+set incfind
+set hlfind
+
+" 'normal' copying and pasting
+nmap -b <C-c> <C-v><C-c>
+nmap -b <C-v> <C-v><C-v>
+nmap -b <C-x> <C-v><C-x>
+
+" Insert Mode Mappings
+imap -b <C-c> <C-v><C-c>
+imap -b <C-v> <C-v><C-v>
+imap -b <C-x> <C-v><C-x>
+
+hi -a Hint text-transform: uppercase;
+" hi CmdLine>* font-family: Terminus; font-size: 8pt;
+
