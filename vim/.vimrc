@@ -1,6 +1,5 @@
 set binary
 
-set nocompatible
 filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -19,6 +18,7 @@ Plugin 'edkolev/tmuxline.vim'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'morhetz/gruvbox'
 Plugin 'chriskempson/base16-vim'
+Plugin 'davidhalter/jedi-vim'
 
 call vundle#end()
 filetype plugin indent on
@@ -89,7 +89,7 @@ inoremap <C-v> <Esc>"+pi
 " leader mappings
 nnoremap <leader><leader> <c-^>
 
-inoremap <leader>. <Esc>
+imap <leader>. <Esc>
 vnoremap <leader>. <Esc>
 
 nnoremap <leader>w :w<CR>

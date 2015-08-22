@@ -65,8 +65,8 @@ editor     = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
 -- user defined
-browser    = "qutebrowser"
-browser2   = "firefox"
+browser    = "firefox"
+browser2   = "qutebrowser"
 gui_editor = "gvim"
 graphics   = "gimp"
 mail       = terminal .. " -e mutt "
@@ -368,7 +368,6 @@ for s = 1, screen.count() do
 
     -- Widgets that are aligned to the upper right
     local right_layout = wibox.layout.fixed.horizontal()
-    if s == 1 then right_layout:add(wibox.widget.systray()) end
     -- right_layout:add(myredshift)
     right_layout:add(mailicon)
     right_layout:add(mailwidget)
@@ -410,6 +409,7 @@ for s = 1, screen.count() do
 
     -- Widgets that are aligned to the bottom right
     bottom_right_layout = wibox.layout.fixed.horizontal()
+    if s == 1 then bottom_right_layout:add(wibox.widget.systray()) end
     bottom_right_layout:add(myredshift)
     bottom_right_layout:add(mylayoutbox[s])
 
@@ -525,56 +525,51 @@ globalkeys = awful.util.table.join(
     awful.key({ altkey,           }, "w",      function () myweather.show(7) end),
 
     -- ALSA volume control
-    awful.key({ altkey }, "Up",
+    awful.key({ }, "XF86AudioRaiseVolume",
         function ()
             os.execute(string.format("amixer set %s 1%%+", volumewidget.channel))
             volumewidget.update()
         end),
-    awful.key({ altkey }, "Down",
+    awful.key({ }, "XF86AudioLowerVolume",
         function ()
             os.execute(string.format("amixer set %s 1%%-", volumewidget.channel))
             volumewidget.update()
         end),
-    awful.key({ altkey }, "m",
+    awful.key({ }, "XF86AudioMute",
         function ()
-            os.execute(string.format("amixer set %s toggle", volumewidget.channel))
-            volumewidget.update()
-        end),
-    awful.key({ altkey, "Control" }, "m",
-        function ()
-            os.execute(string.format("amixer set %s 100%%", volumewidget.channel))
+            os.execute("amixer -D pulse set Master toggle")
             volumewidget.update()
         end),
 
     -- MPD control
-    awful.key({ altkey, "Control" }, "Up",
+    awful.key({ }, "XF86AudioPlay",
         function ()
-            awful.util.spawn_with_shell("mpc toggle || ncmpc toggle || pms toggle")
+            awful.util.spawn_with_shell("mpc toggle")
             mpdwidget.update()
         end),
-    awful.key({ altkey, "Control" }, "Down",
+    awful.key({ }, "XF86AudioNext",
         function ()
-            awful.util.spawn_with_shell("mpc stop || ncmpc stop || pms stop")
+            awful.util.spawn_with_shell("mpc stop")
             mpdwidget.update()
         end),
-    awful.key({ altkey, "Control" }, "Left",
+    awful.key({ }, "XF86AudioPrev",
         function ()
-            awful.util.spawn_with_shell("mpc prev || ncmpc prev || pms prev")
+            awful.util.spawn_with_shell("mpc prev")
             mpdwidget.update()
         end),
-    awful.key({ altkey, "Control" }, "Right",
+    awful.key({ }, "XF86AudioNext",
         function ()
-            awful.util.spawn_with_shell("mpc next || ncmpc next || pms next")
+            awful.util.spawn_with_shell("mpc next && mpc play")
             mpdwidget.update()
         end),
 
-    -- Multimedia Keys
-    awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set Master 1%%+", false) end),
-    awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set Master 1%%-", false) end),
-    awful.key({ }, "XF86AudioMute",        function () awful.util.spawn("amixer set Master toggle", false) end),
-    awful.key({ }, "XF86AudioPlay",        function () awful.util.spawn("mpc toggle", false) end),
-    awful.key({ }, "XF86AudioNext",        function () awful.util.spawn("mpc next", false) end),
-    awful.key({ }, "XF86AudioPrev",        function () awful.util.spawn("mpc prev", false) end),
+    -- -- Multimedia Keys
+    -- awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set Master 1%+", false) end),
+    -- awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set Master 1%-", false) end),
+    -- awful.key({ }, "XF86AudioMute",        function () awful.util.spawn("amixer set Master toggle", false) end),
+    -- awful.key({ }, "XF86AudioPlay",        function () awful.util.spawn("mpc toggle", false) end),
+    -- awful.key({ }, "XF86AudioNext",        function () awful.util.spawn("mpc next", false) end),
+    -- awful.key({ }, "XF86AudioPrev",        function () awful.util.spawn("mpc prev", false) end),
 
     -- Copy to clipboard
     awful.key({ modkey }, "c", function () os.execute("xsel -p -o | xsel -i -b") end),
@@ -593,9 +588,9 @@ globalkeys = awful.util.table.join(
     -- PrintScreen
     awful.key({ }, "Print", function () awful.util.spawn("scrot -e 'mv $f ~/Screenshots/ 2>/dev/null'") end),
 
-    awful.key({ modkey, "Shift"   }, "r",   function () redshift:toggle()   end)
+    awful.key({ modkey, "Shift"   }, "r",   function () redshift:toggle()   end),
     -- User programs
-    -- awful.key({ modkey }, "q", function () awful.util.spawn(browser) end),
+    awful.key({ modkey }, "q", function () awful.util.spawn(browser) end)
     -- awful.key({ modkey }, "i", function () awful.util.spawn(browser2) end),
     -- awful.key({ modkey }, "s", function () awful.util.spawn(gui_editor) end),
     -- awful.key({ modkey }, "g", function () awful.util.spawn(graphics) end),

@@ -5,5 +5,3 @@ visualizer_in_stereo = "yes"
 visualizer_look = ●▍
 visualizer_type = "spectrum" (spectrum/wave)
 mpd_host = "~/.config/mpd/socket"
-now_playing_prefix = "$r$b"
-now_playing_suffix = "$/b$/r"

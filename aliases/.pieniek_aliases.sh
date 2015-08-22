@@ -6,6 +6,7 @@ alias C=clear
 
 # Aliases
 alias pacs='sudo pacman -S'
+alias pacsyu='sudo pacman -Syu'
 alias fuck='sudo $(fc -ln -1)'
 alias relog='sudo pkill -u pieniek'
 alias ..='cd ..'

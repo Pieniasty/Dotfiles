@@ -1,8 +1,7 @@
-set binary
+" vim:fdm=marker
 
-set nocompatible
+" Plugins (Vundle) {{{
 filetype off
-
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
@@ -19,12 +18,16 @@ Plugin 'edkolev/tmuxline.vim'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'morhetz/gruvbox'
 Plugin 'chriskempson/base16-vim'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'ervandew/supertab'
 
 call vundle#end()
 filetype plugin indent on
-
+" }}}
+" Settings {{{
 let mapleader = ","
-
 syntax on
 set number
 set relativenumber
@@ -64,54 +67,59 @@ set gdefault
 
 set virtualedit+=block
 
-set t_Co=256
 set laststatus=2
 set splitbelow
 set splitright
 
 set mouse=a
-
-
-" custom mappings
+" }}}
+" Random mappings {{{
 nnoremap ; :
 vnoremap ; :
 
-noremap <Up> k
-noremap <Down> j
+nnoremap j gj
+nnoremap k gk
+
+noremap <Up> gk
+noremap <Down> gj
 noremap <Left> h
 noremap <Right> l
 
-" leader mappings
+inoremap <C-v> <Esc>"+pi
+
+nnoremap q: <Nop>
+" }}}
+" Leader mappings {{{
 nnoremap <leader><leader> <c-^>
 
-inoremap <leader>. <Esc>
+imap <leader>. <Esc>
 vnoremap <leader>. <Esc>
 
 nnoremap <leader>w :w<CR>
 nnoremap <leader>q :q<CR>
 nnoremap <leader>x :bd<CR>
+nnoremap <leader>h :nohl<CR>
 
 noremap <leader>v <C-w>v
 noremap <leader>s <C-w>s
 
-nnoremap <leader>rv :e ~/.vimrc<CR>
+nnoremap <leader>rv :e ~/.nvimrc<CR>
 nnoremap <leader>rt :e ~/.tmux.conf<CR>
 nnoremap <leader>rz :e ~/.zshrc<CR>
-nnoremap <leader>rb :e ~/.config/bspwm/bspwmrc<CR>
-nnoremap <leader>rs :e ~/.config/sxhkd/sxhkdrc<CR>
-nnoremap <leader>rc :e ~/.config/compton.conf<CR>
-nnoremap <leader>rn :e ~/.ncmpcpp/config<CR>
-nnoremap <leader>rp :e ~/bin/panel<CR>
-
-autocmd! bufwritepost ~/.vimrc nested source ~/.vimrc
-
+"}}}
+" Autocommands {{{
+autocmd! bufwritepost ~/.nvimrc nested source ~/.nvimrc
+autocmd FileType python setlocal completeopt-=preview
+" }}}
+" Plugin settings {{{
+" Jedi
+let g:jedi#force_py_version = 3
+let g:jedi#show_call_signatures = "2"
+" }}}
+" Lightline {{{
 let g:lightline = {
         \ 'colorscheme': 'powerline',
         \ 'mode_map': { 'c': 'NORMAL' },
-        \ 'component': {
-        \   'readonly': '%{&filetype=="help"?"":&readonly?"⭤":""}',
-        \   'modified': '%{&filetype=="help"?"":&modified?"+":&modifiable?"":"-"}'
-        \ },
         \ 'component_function': {
         \   'modified': 'LightLineModified',
         \   'readonly': 'LightLineReadonly',
@@ -155,7 +163,9 @@ function! LightLineFileencoding()
   return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
 endfunction
 
+" }}}
+" Color Scheme {{{
 let base16colorspace=256
-
 colorscheme base16-default
 set background=dark
+" }}}
