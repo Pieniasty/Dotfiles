@@ -1,6 +1,6 @@
 colorscheme base16
 " colorscheme gruvbox-dark
-set guioptions=bCrs
+set guioptions=bBCrs
 set hintkeys=arstneio
 set showtabline=multitab
 set incfind

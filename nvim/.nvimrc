@@ -1,17 +1,19 @@
 " vim:fdm=marker
-
 " Plugins (Vundle) {{{
 filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim'
+Plugin 'tpope/vim-sensible'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-eunuch'
 Plugin 'tpope/vim-commentary'
+Plugin 'tpope/vim-obsession'
+Plugin 'tpope/vim-tbone'
 Plugin 'sjl/gundo.vim'
 Plugin 'itchyny/lightline.vim'
 Plugin 'edkolev/tmuxline.vim'
@@ -22,6 +24,8 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'ervandew/supertab'
+Plugin 'sudar/vim-arduino-syntax'
+" Plugin 'jooize/vim-colemak'
 
 call vundle#end()
 filetype plugin indent on
@@ -37,7 +41,6 @@ set softtabstop=4
 set expandtab
 set smarttab
 set shiftround
-set autoindent
 set smartindent
 
 set nobackup
@@ -49,13 +52,11 @@ set hidden
 set autoread
 
 set list
-set listchars=tab:│\ ,trail:•,extends:❯,precedes:❮
 set shiftround
 set linebreak
 
 set display+=lastline
-set wildmenu
-set wildmode=list:full
+set wildmode=longest,list,full
 set wildignorecase
 
 set ignorecase
@@ -67,15 +68,14 @@ set gdefault
 
 set virtualedit+=block
 
-set laststatus=2
 set splitbelow
 set splitright
 
 set mouse=a
 " }}}
 " Random mappings {{{
-nnoremap ; :
-vnoremap ; :
+" nnoremap ; :
+" vnoremap ; :
 
 nnoremap j gj
 nnoremap k gk
@@ -88,6 +88,9 @@ noremap <Right> l
 inoremap <C-v> <Esc>"+pi
 
 nnoremap q: <Nop>
+
+nnoremap <space> za
+vnoremap <space> zf
 " }}}
 " Leader mappings {{{
 nnoremap <leader><leader> <c-^>
@@ -108,10 +111,16 @@ nnoremap <leader>rt :e ~/.tmux.conf<CR>
 nnoremap <leader>rz :e ~/.zshrc<CR>
 "}}}
 " Autocommands {{{
-autocmd! bufwritepost ~/.nvimrc nested source ~/.nvimrc
-autocmd FileType python setlocal completeopt-=preview
+au! bufwritepost ~/.nvimrc nested source ~/.nvimrc
+au FileType python setlocal completeopt-=preview
+
+augroup RemoveFugitiveMappingForColemak
+    autocmd!
+    autocmd BufEnter * silent! execute "nunmap <buffer> <silent> y<C-G>"
+augroup END
 " }}}
 " Plugin settings {{{
+" let g:loaded_matchparen=1
 " Jedi
 let g:jedi#force_py_version = 3
 let g:jedi#show_call_signatures = "2"

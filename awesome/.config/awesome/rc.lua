@@ -16,6 +16,7 @@ local naughty   = require("naughty")
 local drop      = require("scratchdrop")
 local lain      = require("lain")
 local menubar   = require("menubar")
+local awmodoro  = require("awmodoro")
 -- }}}
 
 -- {{{ Error handling
@@ -69,7 +70,7 @@ browser    = "firefox"
 browser2   = "qutebrowser"
 gui_editor = "gvim"
 graphics   = "gimp"
-mail       = terminal .. " -e mutt "
+mail       = browser2 .. " gmail.com"
 
 local layouts = {
     awful.layout.suit.tile,
@@ -134,7 +135,7 @@ lain.widgets.calendar:attach(mytextclock, { font_size = 10 })
 -- Weather
 weathericon = wibox.widget.imagebox(beautiful.widget_weather)
 myweather = lain.widgets.weather({
-    city_id = 772465, -- placeholder
+    city_id = 3094802, -- www.openweathermap.com/city/ID
     settings = function()
         descr = weather_now["weather"][1]["description"]:lower()
         units = math.floor(weather_now["main"]["temp"])
@@ -279,6 +280,33 @@ redshift:attach(
     end 
 )
 
+--pomodoro wibox
+pomowibox = awful.wibox({ position = "top", screen = 1, height=4})
+pomowibox.visible = false
+local pomodoro = awmodoro.new({
+    minutes             = 25,
+    do_notify           = true,
+    active_bg_color     = '#313131',
+    paused_bg_color     = '#7746D7',
+    -- fg_color            = {type = "linear", from = {0,0}, to = {pomowibox.width, 0}, stops = {{0, "#AECF96"},{0.5, "#88A175"},{1, "#FF5656"}}},
+    fg_color            = '#AECF96',
+    width               = pomowibox.width,
+    height              = pomowibox.height, 
+
+    begin_callback = function()
+        for s = 1, screen.count() do
+            mywibox[s].visible = false
+        end
+        pomowibox.visible = true
+    end,
+
+    finish_callback = function()
+        for s = 1, screen.count() do
+            mywibox[s].visible = true
+        end
+        pomowibox.visible = false
+    end})
+pomowibox:set_widget(pomodoro)
 -- Spacer
 spacer = wibox.widget.textbox(" ")
 
@@ -517,7 +545,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "q",      awesome.quit),
 
     -- Dropdown terminal
-    awful.key({ modkey,	          }, "`",      function () drop(terminal) end),
+    awful.key({ modkey,	          }, "`",      function () drop("termite -e 'mux dropdown'") end),
 
     -- Widgets popups
     awful.key({ altkey,           }, "c",      function () lain.widgets.calendar:show(7) end),
@@ -537,7 +565,7 @@ globalkeys = awful.util.table.join(
         end),
     awful.key({ }, "XF86AudioMute",
         function ()
-            os.execute("amixer -D pulse set Master toggle")
+            os.execute("amixer set Master toggle")
             volumewidget.update()
         end),
 
@@ -576,7 +604,7 @@ globalkeys = awful.util.table.join(
 
     -- Menubar and prompt
     awful.key({ modkey }, "space", function() menubar.show() end),
-    awful.key({ modkey }, "p", function () mypromptbox[mouse.screen]:run() end),
+    awful.key({ modkey }, "g", function () mypromptbox[mouse.screen]:run() end),
     awful.key({ modkey }, "l",
               function ()
                   awful.prompt.run({ prompt = "Run Lua code: " },
@@ -590,10 +618,13 @@ globalkeys = awful.util.table.join(
 
     awful.key({ modkey, "Shift"   }, "r",   function () redshift:toggle()   end),
     -- User programs
-    awful.key({ modkey }, "q", function () awful.util.spawn(browser) end)
+    awful.key({ modkey }, "q", function () awful.util.spawn(browser) end),
     -- awful.key({ modkey }, "i", function () awful.util.spawn(browser2) end),
     -- awful.key({ modkey }, "s", function () awful.util.spawn(gui_editor) end),
     -- awful.key({ modkey }, "g", function () awful.util.spawn(graphics) end),
+
+    awful.key({ modkey          }, "p", function () pomodoro:toggle() end),
+    awful.key({ modkey, "Shift" }, "p", function () pomodoro:finish() end)
 )
 
 clientkeys = awful.util.table.join(
