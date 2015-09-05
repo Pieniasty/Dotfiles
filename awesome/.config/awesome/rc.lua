@@ -70,7 +70,7 @@ browser    = "firefox"
 browser2   = "qutebrowser"
 gui_editor = "gvim"
 graphics   = "gimp"
-mail       = browser2 .. " gmail.com"
+mail       = browser .. " gmail.com"
 
 local layouts = {
     awful.layout.suit.tile,
@@ -153,9 +153,9 @@ fswidget = lain.widgets.fs({
 
 -- Mail IMAP check
 mailicon = wibox.widget.imagebox()
-mailicon:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(mail) end)))
+mailicon:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(mail)  end)))
 mailwidget = lain.widgets.imap({
-    timeout  = 180,
+    timeout  = 90,
     server   = "imap.gmail.com",
     mail     = "pieniasty@gmail.com",
     password = "keyring get mail pieniasty",
